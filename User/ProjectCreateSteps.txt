@@ -1,0 +1,131 @@
+/**
+  @page Steps to Develop Your Own Applications
+  
+  @verbatim
+  ******************** (C) COPYRIGHT 2015 Microbot *******************
+  * @file    User/ProjectDevelopSteps.txt 
+  * @author  Sunphoenixt
+  * @version V1.0.0
+  * @date    10-Feb-2015
+  * @brief   Description of the how use STM32F4-HAL library to create a new project.
+  ******************************************************************************
+  *
+  * Redistribution and use in source and binary forms, with or without modification,
+  * are permitted provided that the following conditions are met:
+  *   1. Redistributions of source code must retain the above copyright notice,
+  *      this list of conditions and the following disclaimer.
+  *   2. Redistributions in binary form must reproduce the above copyright notice,
+  *      this list of conditions and the following disclaimer in the documentation
+  *      and/or other materials provided with the distribution.
+  *   3. Neither the name of Microbot nor the names of its contributors/author
+  *      may be used to endorse or promote products derived from this software
+  *      without specific prior written permission.
+  *
+  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  *
+  ******************************************************************************
+  @endverbatim
+
+@par File Description
+
+This directory provides a reference template project that can be used to build any firmware application for
+STM32F401xEx devices using STM32CubeF4 HAL and running on STM32F401RE-Nucleo board from STMicroelectronics. 
+
+
+@note Care must be taken when using HAL_Delay(), this function provides accurate delay (in milliseconds)
+      based on variable incremented in SysTick ISR. This implies that if HAL_Delay() is called from
+      a peripheral ISR process, then the SysTick interrupt must have higher priority (numerically lower)
+      than the peripheral interrupt. Otherwise the caller ISR process will be blocked.
+      To change the SysTick interrupt priority you have to use HAL_NVIC_SetPriority() function.
+      
+@note The application need to ensure that the SysTick time base is always set to 1 millisecond
+      to have correct HAL operation.
+
+@note The clock setting is configured to have the max product performance (max clock frequency) 
+      so not optimized in term of power consumption.
+      
+@par Directory contents 
+STM32F4BaseLibrary-HAL
+  - Library
+     - STM32F4xx-Nucleo/stm32f4xx_nucleo.c	LEDs and push-button available on STM32F4XX-Nucleo Kit;LCD, joystick and microSD 					available on Adafruit 1.8" TFT LCD shield (reference ID 802)
+     - STM32F4xx-Nucleo/stm32f4xx_nucleo.h	Header file for STM32F401RE-Nucleo board IO/functions define
+     - Inc		HAL library include header files for vary peripherals
+     - Src		HAL library source files for vary peripherals
+     - CMSIS/Include/core_cm4.h		CMSIS Cortex-M4 Core Peripheral Access Layer Header File
+     - CMSIS/Include/core_cm4_simd.h	CMSIS Cortex-M4 SIMD Header File
+     - CMSIS/Include/core_cmFunc.h	CMSIS Cortex-M Core Function Access Header File
+     - CMSIS/Include/core_cmInstr.h	CMSIS Cortex-M Core Instruction Access Header File
+     - CMSIS/Include/stm32f4xx.h	CMSIS STM32F4xx Device Peripheral Access Layer Header File. The file is the unique include file 					that the application programmer is using in the C source code, usually in main.c. This file contains:
+             				- Configuration section that allows to select:
+               				 - The STM32F4xx device used in the target application
+                				- To use or not the peripherals drivers in application code(i.e. code will be based on direct access to 					peripherals registers rather than drivers API), 
+				this option is controlled by  "#define USE_HAL_DRIVER"
+     - CMSIS/Include/stm32f401xe.h	CMSIS STM32F401xExx Device Peripheral Access Layer Header File.  This file contains:
+             				- Data structures and the address mapping for all peripherals
+             				- Peripheral's registers declarations and bits definition
+            				- Macros to access peripherals registers hardware
+     - CMSIS/Include/system_stm32f4xx.h	CMSIS Cortex-M4 Device System Source File for STM32F4xx devices
+     - CMSIS/Source/startup_stm32f401xe.s	STM32F401xe devices vector table for MDK-ARM toolchain. This module performs:
+					- Set the initial SP
+					- Set the initial PC == Reset_Handler
+					- Set the vector table entries with the exceptions ISR address
+					- Branches to __main in the C library (which eventually calls main()).After Reset the 					CortexM4 processor is in Thread mode,priority is Privileged, and the Stack is set to Main.
+     - CMSIS/Source/system_stm32f4xx.c	CMSIS Cortex-M4 Device Peripheral Access Layer System Source File.   This file provides two 					functions and one global variable to be called from user application:
+				- SystemInit(): This function is called at startup just after reset and before branch to main program. This 					call is made inside the "startup_stm32f4xx.s" file.
+				- SystemCoreClock variable: Contains the core clock (HCLK), it can be used  by the user application 					to setup the SysTick  timer or configure other parameters.                      
+				- SystemCoreClockUpdate(): Updates the variable SystemCoreClock and must be called whenever 					the core clock is changed during program execution.
+  - User
+     - reademe.txt		Description of the Templates example.
+     - ProjectDevelopSteps.txt	Description of the how use STM32F4-HAL library to create a new project.
+     - Inc/main.h		Main program header file
+     - Inc/stm32f4xx_hal_conf.h	HAL Configuration file
+     - Inc/stm32f4xx_it.h	Interrupt handlers header file
+     - Src/main.c		Main program
+     - Src/stm32f4xx_hal_msp.c	HAL MSP module
+     - Src/stm32f4xx_it.c	Interrupt handlers
+
+        
+@par Hardware and Software environment  
+
+  - This example runs on STM32F401xEx devices.
+    
+  - This example has been tested with STMicroelectronics STM32F401RE-Nucleo RevC-02 
+    boards and can be easily tailored to any other supported device 
+    and development board.
+
+
+@par How to use it ? 
+
+In order to make the program work, you must do the following :
+1. Copy the whole directory to your own project directory.(exp.Test/)
+2. Open "Test/MDK/Project.uvproj" -> "Options for target Test",set each tab parameters according your application.
+     such as "Device","Output/Listing floders","C/C++ define,optimization,include path" and so on.
+3. Add your code to main.c and include your own C source files,modify the "User/Inc/stm32f4xx_hal_conf.h" for proper include files.Be sure the following 6 files must be included (stm32f4xx_hal_flash.h(HAL_FLASH_MODULE_ENABLED); Core_cm4.h; stm32f4xx_hal_cortex.h(HAL_CORTEX_MODULE_ENABLED); stm32f401xe.h; stm32f4xx_hal_rcc.h(HAL_RCC_MODULE_ENABLED);stm32f4xx_hal_pwr.h(HAL_PWR_MODULE_ENABLED);) and add these 3 files(stm32f4xx_hal.c;stm32f4xx_hal_cortex.c;stm32f4xx_hal_rcc.c;)
+4. Rebuild all the file and make sure no compile error or even warning show.
+5. Download to the board and check result or debug online.
+
+@par Attention when use stm32f4xx-nucleo board BSP library
+This BSP library contains the following functions:
+1. LED_On/Off/Toggle()...
+2. Button_Init/GetState()...
+3. SPI_Read/SPI_Error/SPI_MSPInit()
+4. ADCx_Init/ADCx_MSPInit()
+5. SD_IO_Init/Write/Read().....
+6. LCD_IO_Init/Write/Read().....
+
+and if you want to use it, you should do:
+1. Add "stm32f4xx_nucleo.c" to your project source file and add include path"\Library\STM32F4xx-Nucleo" to the project  "C/C++" tab setting.
+2. Enable "stm32f4xx_hal_adc.h(HAL_ADC_MODULE_ENABLED)","stm32f4xx_hal_spi.h(HAL_SPI_MODULE_ENABLED)","stm32f4xx_hal_def.h","stm32f4xx_hal_gpio.h(HAL_GPIO_MODULE_ENABLED)" in the file "User/Include/stm32f4xx_hal_conf.h".
+3. Add "USE_STM32F4XX_NUCLEO," in the project "C/C++" tab setting.
+4. Rebuild your project and run it.
+ * <h3><center>&copy; COPYRIGHT Microbot</center></h3>
+ */
